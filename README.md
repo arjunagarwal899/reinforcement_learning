@@ -1,1 +1,1 @@
-# reinforcement_learning
+A Repo to implement and learn RL related algorithms through practical implementations and some games.
