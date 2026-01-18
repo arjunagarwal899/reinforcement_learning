@@ -25,7 +25,7 @@ def value_iteration(
             print(f"Iteration {iteration} complete. Sum of state_values: {sum(state_values.values())}")
 
         if have_state_values_converged(old_state_values, state_values):
-            print(f"Converged in {iteration} iterations.")
+            print(f"Converged in {iteration + 1} iterations.")
             break
 
     return policy
