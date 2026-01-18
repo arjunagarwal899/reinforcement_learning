@@ -121,7 +121,7 @@ class Maze(Environment):
 
         return reward
 
-    def visualize(self):
+    def visualize(self, print_rewards: bool = False):
         """Prints a visual representation of the maze. The agent is represented by 'A' exits by 'E', and vortexes by
         'V'."""
         print("Maze:")
@@ -144,9 +144,10 @@ class Maze(Environment):
 
                 print(tile.ljust(3), end="")
             print()
-        print("Reward to exit:".ljust(33), self.reward_to_exit)
-        print("Reward to move (excludes 'stay'):".ljust(33), self.reward_to_move)
-        print("Reward to enter vortex:".ljust(33), self.reward_to_enter_vortex)
+        if print_rewards:
+            print("Reward to exit:".ljust(33), self.reward_to_exit)
+            print("Reward to move (excludes 'stay'):".ljust(33), self.reward_to_move)
+            print("Reward to enter vortex:".ljust(33), self.reward_to_enter_vortex)
 
     @staticmethod
     def ensure_initial_environment_correctness(environment: np.ndarray):
