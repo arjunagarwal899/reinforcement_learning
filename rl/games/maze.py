@@ -1,7 +1,11 @@
+from typing import Self
+
 import numpy as np
 
+from rl.environment import Environment
 
-class Maze:
+
+class Maze(Environment):
     """A grid-like maze from which an agent has to exit. The agent always starts from the top left corner i.e.
     (1, 1). There are multiple exits in the maze. There are also multiple vortexes in the maze that will injure the
     agent if it steps on them.
@@ -35,7 +39,7 @@ class Maze:
         num_vortexes: int,
         *args,
         **kwargs,
-    ) -> "Maze":
+    ) -> Self:
         assert grid_height > 1 and grid_width > 1
         assert num_exits > 0 and num_vortexes >= 0
 
@@ -56,6 +60,17 @@ class Maze:
     def get_current_state(self) -> tuple[int, int]:
         """Returns the current location of the agent."""
         return self.agent_location
+
+    def update_state(self, state: tuple[int, int]):
+        if len(state) != 2 or not isinstance(state[0], int) or not isinstance(state[1], int):
+            raise ValueError("State must be a tuple of two integers.")
+        if state[0] < 0 or state[0] >= self.grid_height or state[1] < 0 or state[1] >= self.grid_width:
+            raise ValueError("State must be within the grid.")
+        self.agent_location = state
+
+    def reset_default_state(self):
+        """Resets the agent's state to the top left corner."""
+        self.update_state((0, 0))
 
     def at_terminal_state(self) -> bool:
         """Returns True if the agent is at a terminal state (i.e. an exit or a vortex)."""
@@ -87,16 +102,16 @@ class Maze:
                 pass
             case "right" | 1:
                 reward = self.reward_to_move
-                self.agent_location = (self.agent_location[0], min(self.agent_location[1] + 1, self.grid_width - 1))
+                self.update_state((self.agent_location[0], min(self.agent_location[1] + 1, self.grid_width - 1)))
             case "down" | 2:
                 reward = self.reward_to_move
-                self.agent_location = (min(self.agent_location[0] + 1, self.grid_height - 1), self.agent_location[1])
+                self.update_state((min(self.agent_location[0] + 1, self.grid_height - 1), self.agent_location[1]))
             case "left" | 3:
                 reward = self.reward_to_move
-                self.agent_location = (self.agent_location[0], max(self.agent_location[1] - 1, 0))
+                self.update_state((self.agent_location[0], max(self.agent_location[1] - 1, 0)))
             case "up" | 4:
                 reward = self.reward_to_move
-                self.agent_location = (max(self.agent_location[0] - 1, 0), self.agent_location[1])
+                self.update_state((max(self.agent_location[0] - 1, 0), self.agent_location[1]))
 
         # Update reward
         if self.environment[self.agent_location] == "E":
@@ -109,6 +124,7 @@ class Maze:
     def visualize(self):
         """Prints a visual representation of the maze. The agent is represented by 'A' exits by 'E', and vortexes by
         'V'."""
+        print("Maze:")
         for row in range(self.grid_height):
             for col in range(self.grid_width):
                 tile = self.environment[row][col]
@@ -128,6 +144,9 @@ class Maze:
 
                 print(tile.ljust(3), end="")
             print()
+        print("Reward to exit:".ljust(33), self.reward_to_exit)
+        print("Reward to move (excludes 'stay'):".ljust(33), self.reward_to_move)
+        print("Reward to enter vortex:".ljust(33), self.reward_to_enter_vortex)
 
     @staticmethod
     def ensure_initial_environment_correctness(environment: np.ndarray):
@@ -152,6 +171,17 @@ class Maze:
     @property
     def grid_width(self):
         return self.environment.shape[1]
+
+    @property
+    def states(self) -> list[tuple[int, int]]:
+        return [(i, j) for i in range(self.grid_height) for j in range(self.grid_width)]
+
+    @property
+    def actions(self, as_str: bool = True) -> list[str | int]:
+        if as_str:
+            return ["stay", "right", "down", "left", "up"]
+        else:
+            return [0, 1, 2, 3, 4]
 
 
 if __name__ == "__main__":
