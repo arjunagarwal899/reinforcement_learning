@@ -7,11 +7,20 @@ from rl.policy import Policy
 def get_experience_sample(
     policy: Policy,
     environment: Environment,
+    state: Hashable | None = None,
+    action: Hashable | None = None,
     reset_to_original_state: bool = False,
     style: Literal["sars", "sarsa"] = "sars",
 ):
+    if state is not None:
+        environment.update_state(state)
     s = environment.get_current_state()
-    a = policy.get_action(s)
+
+    if action is None:
+        a = policy.get_action(s)
+    else:
+        a = action
+
     r_prime = environment.take_action(a)
     s_prime = environment.get_current_state()
     if style == "sars":
@@ -28,6 +37,8 @@ def generate_trajectory(
     policy: Policy,
     environment: Environment,
     max_steps: int,
+    start_state: Hashable | None = None,
+    start_action: Hashable | None = None,
     end_at_terminal_steps: bool = True,
     reset_to_original_state: bool = False,
     style: Literal["sars", "sarsa"] = "sars",
@@ -36,7 +47,11 @@ def generate_trajectory(
 
     trajectory = []
     for _ in range(max_steps):
-        experience_sample = get_experience_sample(policy, environment, reset_to_original_state=False, style=style)
+        experience_sample = get_experience_sample(
+            policy, environment, start_state, start_action, reset_to_original_state=False, style=style
+        )
+        start_state = None
+        start_action = None
 
         if style == "sars":
             pass

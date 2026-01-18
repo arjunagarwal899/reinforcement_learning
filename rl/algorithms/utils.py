@@ -14,6 +14,18 @@ def have_state_values_converged(
     return True
 
 
+def have_action_values_converged(
+    old_action_values: dict[Hashable, dict[Hashable, float]],
+    new_action_values: dict[Hashable, dict[Hashable, float]],
+    tolerance: float = 0.01,
+):
+    for state in old_action_values:
+        for action in new_action_values[state]:
+            if new_action_values[state][action] - old_action_values[state][action] > tolerance:
+                return False
+    return True
+
+
 def has_policy_converged(
     old_policy: Policy,
     new_policy: Policy,
@@ -55,4 +67,14 @@ def calculate_state_value(
     for action, probability in action_probabilities.items():
         action_value = calculate_action_value(state, action, environment, state_values, discount_factor)
         state_value += probability * action_value
+    return state_value
+
+
+def get_state_value_from_action_values(
+    action_values: dict[Hashable, dict[Hashable, float]], state: Hashable, policy: Policy
+) -> float:
+    action_probabilities = policy.get_action_probabilities(state)
+    state_value = 0
+    for action, probability in action_probabilities.items():
+        state_value += probability * action_values[state][action]
     return state_value
