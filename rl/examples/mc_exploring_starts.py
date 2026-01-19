@@ -8,7 +8,7 @@ if __name__ == "__main__":
 
     maze.visualize(print_rewards=True)
     print()
-    print("Running MC Basic...")
+    print("Running MC Exploring Starts...")
     optimal_policy = mc_exploring_starts(
         policy,
         maze,

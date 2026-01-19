@@ -8,7 +8,7 @@ if __name__ == "__main__":
 
     maze.visualize(print_rewards=True)
     print()
-    print("Running MC Basic...")
+    print("Running MC ε-greedy...")
     optimal_policy = mc_e_greedy(
         policy,
         maze,
