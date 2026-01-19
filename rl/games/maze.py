@@ -1,4 +1,4 @@
-from typing import Self
+from typing import Hashable, Self
 
 import numpy as np
 
@@ -61,6 +61,9 @@ class Maze(Environment):
         """Returns the current location of the agent."""
         return self.agent_location
 
+    def sample_random_state(self) -> Hashable:
+        return (np.random.randint(0, self.grid_height), np.random.randint(0, self.grid_width))
+
     def update_state(self, state: tuple[int, int]):
         if len(state) != 2 or not isinstance(state[0], int) or not isinstance(state[1], int):
             raise ValueError("State must be a tuple of two integers.")
@@ -72,9 +75,13 @@ class Maze(Environment):
         """Resets the agent's state to the top left corner."""
         self.update_state((0, 0))
 
+    def is_terminal_state(self, state: Hashable) -> bool:
+        """Returns True if the state is at a terminal state (i.e. an exit)."""
+        return self.environment[state] in {"E"}  # vortex is not a terminal state
+
     def at_terminal_state(self) -> bool:
-        """Returns True if the agent is at a terminal state (i.e. an exit or a vortex)."""
-        return self.environment[self.agent_location] in {"E", "V"}
+        """Returns True if the agent is at a terminal state (i.e. an exit )."""
+        return self.is_terminal_state(self.agent_location)
 
     def take_action(self, action: int | str) -> float:
         """Takes an action and returns the reward.
