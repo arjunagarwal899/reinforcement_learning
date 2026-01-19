@@ -15,7 +15,8 @@ def visualize_maze_policy(policy: Policy, maze: Maze):
                 tile = "\033[31mV\033[0m"
 
             state = (row, col)
-            action = policy.get_action(state)
+            action_probabilities = policy.get_action_probabilities(state)
+            action = max(action_probabilities, key=action_probabilities.get)
 
             if action == "up":
                 tile += "↑"
