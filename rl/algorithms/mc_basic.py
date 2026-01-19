@@ -29,8 +29,8 @@ def mc_basic(
                         end_at_terminal_steps=end_trajectory_at_terminal_state,
                     )
                     g = 0
-                    for t in reversed(trajectory):
-                        g = discount_factor * g + t[2]
+                    for _, _, r, _ in reversed(trajectory):
+                        g = discount_factor * g + r
                     returns.append(g)
                 action_values[s][a] = sum(returns) / len(returns)
 
