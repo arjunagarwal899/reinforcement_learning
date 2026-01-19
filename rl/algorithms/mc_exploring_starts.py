@@ -5,10 +5,10 @@ from rl.algorithms.utils import get_state_value_from_action_values
 def mc_exploring_starts(
     policy: DeterministicPolicy,
     environment: Environment,
-    discount_factor: float = 0.9,
-    num_episodes: int = 360,
-    max_steps_in_trajectory: int = 100,
-    end_trajectory_at_terminal_state: bool = True,
+    discount_factor: float,
+    num_episodes: int,
+    max_steps_in_trajectory: int,
+    end_trajectory_at_terminal_state: bool,
 ):
     returns = {s: {a: [] for a in environment.actions} for s in environment.states}
     action_values = {s: {a: 0 for a in environment.actions} for s in environment.states}

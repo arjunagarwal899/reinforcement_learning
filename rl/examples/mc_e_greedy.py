@@ -9,7 +9,14 @@ if __name__ == "__main__":
     maze.visualize(print_rewards=True)
     print()
     print("Running MC Basic...")
-    optimal_policy = mc_e_greedy(policy, maze)
+    optimal_policy = mc_e_greedy(
+        policy,
+        maze,
+        discount_factor=0.9,
+        num_episodes=500,
+        max_steps_in_trajectory=10,
+        end_trajectory_at_terminal_state=False,
+    )
     print()
     optimal_policy.visualize()
     print()

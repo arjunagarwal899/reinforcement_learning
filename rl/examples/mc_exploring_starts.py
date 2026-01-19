@@ -9,7 +9,14 @@ if __name__ == "__main__":
     maze.visualize(print_rewards=True)
     print()
     print("Running MC Basic...")
-    optimal_policy = mc_exploring_starts(policy, maze)
+    optimal_policy = mc_exploring_starts(
+        policy,
+        maze,
+        discount_factor=0.9,
+        num_episodes=360,
+        max_steps_in_trajectory=100,
+        end_trajectory_at_terminal_state=True,
+    )
     print()
     optimal_policy.visualize()
     print()

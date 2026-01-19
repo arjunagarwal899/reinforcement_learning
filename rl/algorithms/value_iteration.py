@@ -5,8 +5,8 @@ from rl.algorithms.utils import calculate_action_value, have_state_values_conver
 def value_iteration(
     policy: DeterministicPolicy,
     environment: Environment,
-    discount_factor: float = 0.9,
-    max_iterations: int = 100,
+    discount_factor: float,
+    max_iterations: int,
 ):
     state_values = {s: 0 for s in environment.states}
     for iteration in range(max_iterations):

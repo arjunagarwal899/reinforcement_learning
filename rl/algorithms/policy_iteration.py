@@ -12,20 +12,29 @@ def policy_iteration(
     environment: Environment,
     discount_factor: float = 0.9,
     max_overall_iterations: int = 100,
-    truncate_policy_evaluation_iterations: int = 10000,
+    truncate_policy_evaluation_iterations: int | None = None,
 ):
     for overall_iteration in range(max_overall_iterations):
         old_policy = policy.copy()
 
         # Policy evaluation
         state_values = {s: 0 for s in environment.states}
-        for policy_evaluation_iteration in range(truncate_policy_evaluation_iterations):
+        policy_evaluation_iteration = 0
+        while True:
             old_state_values = state_values.copy()
             for s in environment.states:
                 state_values[s] = calculate_state_value(s, policy, environment, state_values, discount_factor)
 
             if have_state_values_converged(old_state_values, state_values):
                 break
+
+            if (
+                truncate_policy_evaluation_iterations is not None
+                and policy_evaluation_iteration >= truncate_policy_evaluation_iterations
+            ):
+                break
+
+            policy_evaluation_iteration += 1
 
         # Policy improvement
         for s in environment.states:

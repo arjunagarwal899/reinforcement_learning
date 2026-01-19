@@ -7,10 +7,10 @@ from rl.algorithms.utils import get_state_value_from_action_values
 def mc_e_greedy(
     policy: EpsilonGreedyPolicy,
     environment: Environment,
-    discount_factor: float = 0.9,
-    num_episodes: int = 500,
-    max_steps_in_trajectory: int = 10,
-    end_trajectory_at_terminal_state: bool = False,
+    discount_factor: float,
+    num_episodes: int,
+    max_steps_in_trajectory: int,
+    end_trajectory_at_terminal_state: bool,
 ):
     returns = {s: {a: [] for a in environment.actions} for s in environment.states}
     action_values = {s: {a: 0 for a in environment.actions} for s in environment.states}

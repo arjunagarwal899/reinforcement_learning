@@ -5,11 +5,11 @@ from rl.algorithms.utils import get_state_value_from_action_values, have_action_
 def mc_basic(
     policy: DeterministicPolicy,
     environment: Environment,
-    discount_factor: float = 0.9,
-    max_iterations: int = 100,
-    num_samples_per_iteration: int = 10,
-    max_steps_in_trajectory: int = 10,
-    end_trajectory_at_terminal_state: bool = True,
+    discount_factor: float,
+    max_iterations: int,
+    num_samples_per_iteration: int,
+    max_steps_in_trajectory: int,
+    end_trajectory_at_terminal_state: bool,
 ):
     action_values = {s: {a: -1000 for a in environment.actions} for s in environment.states}
     for iteration in range(max_iterations):

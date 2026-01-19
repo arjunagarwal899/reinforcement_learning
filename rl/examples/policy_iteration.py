@@ -9,7 +9,13 @@ if __name__ == "__main__":
     maze.visualize(print_rewards=True)
     print()
     print("Running Policy Iteration...")
-    optimal_policy = policy_iteration(policy, maze)
+    optimal_policy = policy_iteration(
+        policy,
+        maze,
+        discount_factor=0.9,
+        max_overall_iterations=100,
+        truncate_policy_evaluation_iterations=None,
+    )
     print()
     optimal_policy.visualize()
     print()
@@ -25,7 +31,13 @@ if __name__ == "__main__":
     maze.visualize(print_rewards=True)
     print()
     print("Running Truncated Policy Iteration...")
-    optimal_policy = policy_iteration(policy, maze, truncate_policy_evaluation_iterations=10)
+    optimal_policy = policy_iteration(
+        policy,
+        maze,
+        discount_factor=0.9,
+        max_overall_iterations=100,
+        truncate_policy_evaluation_iterations=10,
+    )
     print()
     optimal_policy.visualize()
     print()

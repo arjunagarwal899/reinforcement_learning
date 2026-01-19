@@ -9,7 +9,12 @@ if __name__ == "__main__":
     maze.visualize(print_rewards=True)
     print()
     print("Running Value Iteration...")
-    optimal_policy = value_iteration(policy, maze)
+    optimal_policy = value_iteration(
+        policy,
+        maze,
+        discount_factor=0.9,
+        max_iterations=100,
+    )
     print()
     optimal_policy.visualize()
     print()
